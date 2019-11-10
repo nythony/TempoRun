@@ -28,12 +28,18 @@ export default class Player extends Component {
 
     this.timer = null;
     this.addOne = this.addOne.bind(this);
+    this.decreaseOne = this.decreaseOne.bind(this);
     this.stopTimer = this.stopTimer.bind(this);
   }
 
   addOne() {
     this.setState({cadence: this.state.cadence + 5});
-    this.timer = setTimeout(this.addOne, 200);
+    this.timer = setTimeout(this.addOne,200);
+  }
+
+  decreaseOne() {
+    this.setState({cadence: this.state.cadence - 5});
+    this.timer = setTimeout(this.decreaseOne, 200);
   }
 
   stopTimer() {
@@ -120,6 +126,8 @@ export default class Player extends Component {
           title={track.title} artist={track.artist}
           onMorePress={() => this.setState({cadence: this.state.cadence + 5})}
           onAddPress={() => this.setState({cadence: this.state.cadence - 5})}
+          onAddHold={() => this.decreaseOne()}
+          onAddHoldOff={() => this.stopTimer()}
           onHold={() => this.addOne()}
           onHoldOff={() => this.stopTimer()}
 
