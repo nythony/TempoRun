@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
+import Player from './Player';
 
 const TrackDetails = ({
   title,
@@ -17,6 +18,8 @@ const TrackDetails = ({
   onMorePress,
   onTitlePress,
   onArtistPress,
+  onHold,
+  onHoldOff,
 }) => (
   <View style={styles.container}>
     <TouchableOpacity onPress={onAddPress}>
@@ -27,7 +30,7 @@ const TrackDetails = ({
       <Text style={styles.title} onPress={onTitlePress}>{title}</Text>
       <Text style={styles.artist} onPress={onArtistPress}>{artist}</Text>
     </View>
-    <TouchableOpacity onPress={onMorePress}>
+    <TouchableOpacity onPress={onMorePress} onPressIn={onHold} onPressOut={onHoldOff}>
       <View style={styles.moreButton}>
         <Image style={styles.moreButtonIcon}
           source={require('../img/ic_more_horiz_white.png')} />

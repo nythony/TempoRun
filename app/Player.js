@@ -23,7 +23,21 @@ export default class Player extends Component {
       selectedTrack: 0,
       repeatOn: false,
       shuffleOn: false,
+      cadence: 100,
     };
+
+    this.timer = null;
+    this.addOne = this.addOne.bind(this);
+    this.stopTimer = this.stopTimer.bind(this);
+  }
+
+  addOne() {
+    this.setState({cadence: this.state.cadence + 5});
+    this.timer = setTimeout(this.addOne, 200);
+  }
+
+  stopTimer() {
+    clearTimeout(this.timer);
   }
 
   setDuration(data) {
@@ -102,11 +116,17 @@ export default class Player extends Component {
     return (
       <View style={styles.container}>
         <StatusBar hidden={true} />
-        <Header message="Playing From Charts" />
+        <Header message= {"Cadence: " + this.state.cadence}/>
         <AlbumArt url={track.albumArtUrl} />
         <TrackDetails 
           title={track.title} artist={track.artist}
-          onMorePress={() => this.setState({rate: 2})}/>
+          onMorePress={() => this.setState({cadence: this.state.cadence + 5})}
+          onAddPress={() => this.setState({cadence: this.state.cadence - 5})}
+          onHold={() => this.addOne()}
+          onHoldOff={() => this.stopTimer()}
+
+          //onMorePress={() => this.setState({rate: this.state.rate * 2})}
+          />
 
         <SeekBar
           onSeek={this.seek.bind(this)}
@@ -142,3 +162,6 @@ const styles = {
     width: 0,
   }
 };
+
+
+
