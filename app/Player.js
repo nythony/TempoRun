@@ -10,6 +10,7 @@ import TrackDetails from './TrackDetails';
 import SeekBar from './SeekBar';
 import Controls from './Controls';
 import Video from 'react-native-video';
+import { Pedometer } from "expo-sensors";
 
 export default class Player extends Component {
   constructor(props) {

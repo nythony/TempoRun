@@ -177,11 +177,11 @@ android {
         }
     }
 }
-
+apply from: '../../node_modules/react-native-unimodules/gradle.groovy'
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
-
+    addUnimodulesDependencies()
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")

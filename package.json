@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "@react-native-community/slider": "^2.0.3",
+    "expo-sensors": "^7.0.0",
     "react": "16.9.0",
     "react-native": "0.61.4",
     "react-native-track-player": "^1.1.8",
+    "react-native-unimodules": "^0.6.0",
     "react-native-video": "^5.0.2",
     "save": "^2.4.0"
   },
