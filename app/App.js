@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Player from './Player';
-//import Jb from './Justin'
+import { Pedometer } from "expo-sensors"; 
 
 
 export const TRACKS = [
@@ -25,8 +25,47 @@ export const TRACKS = [
 ];
 
 export default class App extends Component {
+  state = {
+    isPedometerAvailable: "checking",
+    currentStepCount: 0
+  };
+
+  componentDidMount() {
+    this._subscribe();
+  }
+
+  componentWillUnmount() {
+    this._unsubscribe();
+  }
+
+  _subscribe = () => {
+    this._subscription = Pedometer.watchStepCount(result => {
+      this.setState({
+        currentStepCount: result.steps
+      });
+    });
+
+    Pedometer.isAvailableAsync().then(
+      result => {
+        this.setState({
+          isPedometerAvailable: String(result)
+        });
+      },
+      error => {
+        this.setState({
+          isPedometerAvailable: "Could not get isPedometerAvailable: " + error
+        });
+      }
+    );
+  }
+
+  _unsubscribe = () => {
+    this._subscription && this._subscription.remove();
+    this._subscription = null;
+  };
+
   render() {
-    return <Player tracks={TRACKS} />
+    return <Player tracks={TRACKS} isPedometerAvailable={this.state.isPedometerAvailable}/>
   }
 }
 

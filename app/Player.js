@@ -10,7 +10,6 @@ import TrackDetails from './TrackDetails';
 import SeekBar from './SeekBar';
 import Controls from './Controls';
 import Video from 'react-native-video';
-import { Pedometer } from "expo-sensors";
 
 export default class Player extends Component {
   constructor(props) {
@@ -78,8 +77,6 @@ export default class Player extends Component {
     }
   }
 
-
-
   render() {
     const track = this.props.tracks[this.state.selectedTrack];
     const video = this.state.isChanging ? null : (
@@ -100,7 +97,7 @@ export default class Player extends Component {
     return (
       <View style={styles.container}>
         <StatusBar hidden={true} />
-        <Header message="Playing From Charts" />
+        <Header message={this.props.isPedometerAvailable} />
         <AlbumArt url={track.albumArtUrl} />
         <TrackDetails title={track.title} artist={track.artist} />
 
