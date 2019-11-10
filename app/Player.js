@@ -11,6 +11,8 @@ import SeekBar from './SeekBar';
 import Controls from './Controls';
 import Video from 'react-native-video';
 
+var cadence = 150;
+
 export default class Player extends Component {
   constructor(props) {
     super(props);
@@ -84,9 +86,8 @@ export default class Player extends Component {
     const video = this.state.isChanging ? null : (
       <Video 
         source={track.audioUrl}
-        //source={require('./Justin.mp3')} // Can be a URL or a local file.
         ref="audioElement"
-        rate={300}
+        rate={cadence/track.bpm}
         paused={this.state.paused}               // Pauses playback entirely.
         resizeMode="cover"           // Fill the whole screen at aspect ratio.
         repeat={true}                // Repeat forever.
