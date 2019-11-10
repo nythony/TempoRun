@@ -23,7 +23,7 @@ export default class Player extends Component {
       selectedTrack: 0,
       repeatOn: false,
       shuffleOn: false,
-      cadence: this.props.isPedometerAvailable == "true" ? this.props.currentStepCount : 100,
+      cadence: 100,
     };
 
     this.timer = null;
@@ -99,12 +99,13 @@ export default class Player extends Component {
   }
 
   render() {
+    const cadence = this.props.isPedometerAvailable == "true" ? this.props.cadence : this.state.cadence;
     const track = this.props.tracks[this.state.selectedTrack];
     const video = this.state.isChanging ? null : (
       <Video 
         source={track.audioUrl}
         ref="audioElement"
-        rate={this.state.cadence/track.bpm}
+        rate={cadence/track.bpm}
         paused={this.state.paused}               // Pauses playback entirely.
         resizeMode="cover"           // Fill the whole screen at aspect ratio.
         repeat={true}                // Repeat forever.
@@ -119,7 +120,7 @@ export default class Player extends Component {
     return (
       <View style={styles.container}>
         <StatusBar hidden={true} />
-        <Header message= {"Cadence: " + this.state.cadence}/>
+        <Header message= {"Cadence: " + cadence}/>
         <AlbumArt url={track.albumArtUrl} />
         <TrackDetails 
           title={track.title} artist={this.props.isPedometerAvailable}

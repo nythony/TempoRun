@@ -41,7 +41,9 @@ export const TRACKS = [
 export default class App extends Component {
   state = {
     isPedometerAvailable: "checking",
-    currentStepCount: 0
+    prevTime: Date.now(),
+    prevStepCount: 0,
+    cadence: 150
   };
 
   componentDidMount() {
@@ -54,9 +56,18 @@ export default class App extends Component {
 
   _subscribe = () => {
     this._subscription = Pedometer.watchStepCount(result => {
-      this.setState({
-        currentStepCount: result.steps
-      });
+      var curTime = Date.now();
+      var prevTime = this.state.prevTime;
+      var timeDelta = curTime - prevTime;
+      var currentStepCount = result.steps;
+      var prevStepCount = this.state.prevStepCount;
+      if (timeDelta >= 5000){
+        this.setState({
+          cadence: (currentStepCount-prevStepCount)/(timeDelta / 1000.0 / 60.0),
+          prevStepCount: currentStepCount,
+          prevTime: curTime
+        });
+      }
     });
 
     Pedometer.isAvailableAsync().then(
@@ -79,7 +90,7 @@ export default class App extends Component {
   };
 
   render() {
-    return <Player tracks={TRACKS} isPedometerAvailable={this.state.isPedometerAvailable} currentStepCount = {this.state.currentStepCount}/>
+    return <Player tracks={TRACKS} isPedometerAvailable={this.state.isPedometerAvailable} cadence = {this.state.cadence}/>
   }
 }
 
