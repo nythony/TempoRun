@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Player from './Player';
-//import Jb from './Justin'
+import Jb from './Justin'
 
 
 export const TRACKS = [
