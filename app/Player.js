@@ -82,7 +82,9 @@ export default class Player extends Component {
   render() {
     const track = this.props.tracks[this.state.selectedTrack];
     const video = this.state.isChanging ? null : (
-      <Video source={{uri: track.audioUrl}} // Can be a URL or a local file.
+      <Video 
+        source={track.audioUrl}
+        //source={require('./Justin.mp3')} // Can be a URL or a local file.
         ref="audioElement"
         rate={300}
         paused={this.state.paused}               // Pauses playback entirely.
