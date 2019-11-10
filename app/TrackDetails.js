@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import Player from './Player';
 
 const TrackDetails = ({
   title,
@@ -33,10 +32,8 @@ const TrackDetails = ({
       <Text style={styles.artist} onPress={onArtistPress}>{artist}</Text>
     </View>
     <TouchableOpacity onPress={onMorePress} onPressIn={onHold} onPressOut={onHoldOff}>
-      <View style={styles.moreButton}>
-        <Image style={styles.moreButtonIcon}
-          source={require('../img/ic_add_circle_outline_white.png')} />
-      </View>
+      <Image style={styles.button}
+        source={require('../img/ic_keyboard_arrow_up_white.png')} />
     </TouchableOpacity>
   </View>
 );
@@ -68,17 +65,22 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   button: {
+    borderColor: 'rgb(255, 255, 255)',
+    borderWidth: 2,
     opacity: 0.72,
-    width: 40,
-    height: 40,
+    borderRadius: 10,
+    width: 25,
+    height: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   moreButton: {
     borderColor: 'rgb(255, 255, 255)',
     borderWidth: 2,
     opacity: 0.72,
     borderRadius: 10,
-    width: 20,
-    height: 20,
+    width: 25,
+    height:25,
     alignItems: 'center',
     justifyContent: 'center',
   },

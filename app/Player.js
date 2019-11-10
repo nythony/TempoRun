@@ -98,18 +98,14 @@ export default class Player extends Component {
     }
   }
 
-  onIncrease() {
-   this.state.rate=this.state.rate +200
-  }
 
   render() {
     const track = this.props.tracks[this.state.selectedTrack];
     const video = this.state.isChanging ? null : (
       <Video 
         source={track.audioUrl}
-        //source={require('./Justin.mp3')} // Can be a URL or a local file.
         ref="audioElement"
-        rate={this.state.rate}
+        rate={this.state.cadence/track.bpm}
         paused={this.state.paused}               // Pauses playback entirely.
         resizeMode="cover"           // Fill the whole screen at aspect ratio.
         repeat={true}                // Repeat forever.
