@@ -16,13 +16,34 @@ export default class Player extends Component {
     super(props);
 
     this.state = {
+      rate: 1,
       paused: true,
       totalLength: 1,
       currentPosition: 0,
       selectedTrack: 0,
       repeatOn: false,
       shuffleOn: false,
+      cadence: this.props.isPedometerAvailable == "true" ? this.props.currentStepCount : 100,
     };
+
+    this.timer = null;
+    this.addOne = this.addOne.bind(this);
+    this.decreaseOne = this.decreaseOne.bind(this);
+    this.stopTimer = this.stopTimer.bind(this);
+  }
+
+  addOne() {
+    this.setState({cadence: this.state.cadence + 5});
+    this.timer = setTimeout(this.addOne,200);
+  }
+
+  decreaseOne() {
+    this.setState({cadence: this.state.cadence - 5});
+    this.timer = setTimeout(this.decreaseOne, 200);
+  }
+
+  stopTimer() {
+    clearTimeout(this.timer);
   }
 
   setDuration(data) {
@@ -80,9 +101,10 @@ export default class Player extends Component {
   render() {
     const track = this.props.tracks[this.state.selectedTrack];
     const video = this.state.isChanging ? null : (
-      <Video source={{uri: track.audioUrl}} // Can be a URL or a local file.
+      <Video 
+        source={track.audioUrl}
         ref="audioElement"
-        rate={300}
+        rate={this.state.cadence/track.bpm}
         paused={this.state.paused}               // Pauses playback entirely.
         resizeMode="cover"           // Fill the whole screen at aspect ratio.
         repeat={true}                // Repeat forever.
@@ -97,9 +119,19 @@ export default class Player extends Component {
     return (
       <View style={styles.container}>
         <StatusBar hidden={true} />
-        <Header message={this.props.isPedometerAvailable} />
+        <Header message= {"Cadence: " + this.state.cadence}/>
         <AlbumArt url={track.albumArtUrl} />
-        <TrackDetails title={track.title} artist={track.artist} />
+        <TrackDetails 
+          title={track.title} artist={this.props.isPedometerAvailable}
+          onMorePress={() => this.setState({cadence: this.state.cadence + 5})}
+          onAddPress={() => this.setState({cadence: this.state.cadence - 5})}
+          onAddHold={() => this.decreaseOne()}
+          onAddHoldOff={() => this.stopTimer()}
+          onHold={() => this.addOne()}
+          onHoldOff={() => this.stopTimer()}
+
+          //onMorePress={() => this.setState({rate: this.state.rate * 2})}
+          />
 
         <SeekBar
           onSeek={this.seek.bind(this)}
@@ -111,6 +143,7 @@ export default class Player extends Component {
           onPressRepeat={() => this.setState({repeatOn : !this.state.repeatOn})}
           repeatOn={this.state.repeatOn}
           shuffleOn={this.state.shuffleOn}
+          onIncrease={this.onIncrease}
           forwardDisabled={this.state.selectedTrack === this.props.tracks.length - 1}
           onPressShuffle={() => this.setState({shuffleOn: !this.state.shuffleOn})}
           onPressPlay={() => this.setState({paused: false})}
@@ -134,3 +167,6 @@ const styles = {
     width: 0,
   }
 };
+
+
+
