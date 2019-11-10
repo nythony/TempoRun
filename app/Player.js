@@ -11,20 +11,33 @@ import SeekBar from './SeekBar';
 import Controls from './Controls';
 import Video from 'react-native-video';
 
-var cadence = 150;
-
 export default class Player extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      rate: 1,
       paused: true,
       totalLength: 1,
       currentPosition: 0,
       selectedTrack: 0,
       repeatOn: false,
       shuffleOn: false,
+      cadence: 100,
     };
+
+    this.timer = null;
+    this.addOne = this.addOne.bind(this);
+    this.stopTimer = this.stopTimer.bind(this);
+  }
+
+  addOne() {
+    this.setState({cadence: this.state.cadence + 5});
+    this.timer = setTimeout(this.addOne, 200);
+  }
+
+  stopTimer() {
+    clearTimeout(this.timer);
   }
 
   setDuration(data) {
@@ -80,14 +93,13 @@ export default class Player extends Component {
   }
 
 
-
   render() {
     const track = this.props.tracks[this.state.selectedTrack];
     const video = this.state.isChanging ? null : (
       <Video 
         source={track.audioUrl}
         ref="audioElement"
-        rate={cadence/track.bpm}
+        rate={this.state.cadence/track.bpm}
         paused={this.state.paused}               // Pauses playback entirely.
         resizeMode="cover"           // Fill the whole screen at aspect ratio.
         repeat={true}                // Repeat forever.
@@ -102,9 +114,17 @@ export default class Player extends Component {
     return (
       <View style={styles.container}>
         <StatusBar hidden={true} />
-        <Header message="Playing From Charts" />
+        <Header message= {"Cadence: " + this.state.cadence}/>
         <AlbumArt url={track.albumArtUrl} />
-        <TrackDetails title={track.title} artist={track.artist} />
+        <TrackDetails 
+          title={track.title} artist={track.artist}
+          onMorePress={() => this.setState({cadence: this.state.cadence + 5})}
+          onAddPress={() => this.setState({cadence: this.state.cadence - 5})}
+          onHold={() => this.addOne()}
+          onHoldOff={() => this.stopTimer()}
+
+          //onMorePress={() => this.setState({rate: this.state.rate * 2})}
+          />
 
         <SeekBar
           onSeek={this.seek.bind(this)}
@@ -116,6 +136,7 @@ export default class Player extends Component {
           onPressRepeat={() => this.setState({repeatOn : !this.state.repeatOn})}
           repeatOn={this.state.repeatOn}
           shuffleOn={this.state.shuffleOn}
+          onIncrease={this.onIncrease}
           forwardDisabled={this.state.selectedTrack === this.props.tracks.length - 1}
           onPressShuffle={() => this.setState({shuffleOn: !this.state.shuffleOn})}
           onPressPlay={() => this.setState({paused: false})}
@@ -139,3 +160,6 @@ const styles = {
     width: 0,
   }
 };
+
+
+
