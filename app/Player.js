@@ -16,6 +16,7 @@ export default class Player extends Component {
     super(props);
 
     this.state = {
+      rate: 1,
       paused: true,
       totalLength: 1,
       currentPosition: 0,
@@ -77,14 +78,16 @@ export default class Player extends Component {
     }
   }
 
-
+  onIncrease() {
+   this.state.rate=this.state.rate +200
+  }
 
   render() {
     const track = this.props.tracks[this.state.selectedTrack];
     const video = this.state.isChanging ? null : (
       <Video source={{uri: track.audioUrl}} // Can be a URL or a local file.
         ref="audioElement"
-        rate={300}
+        rate={this.state.rate}
         paused={this.state.paused}               // Pauses playback entirely.
         resizeMode="cover"           // Fill the whole screen at aspect ratio.
         repeat={true}                // Repeat forever.
@@ -101,7 +104,9 @@ export default class Player extends Component {
         <StatusBar hidden={true} />
         <Header message="Playing From Charts" />
         <AlbumArt url={track.albumArtUrl} />
-        <TrackDetails title={track.title} artist={track.artist} />
+        <TrackDetails 
+          title={track.title} artist={track.artist}
+          onMorePress={() => this.setState({rate: 2})}/>
 
         <SeekBar
           onSeek={this.seek.bind(this)}
@@ -113,6 +118,7 @@ export default class Player extends Component {
           onPressRepeat={() => this.setState({repeatOn : !this.state.repeatOn})}
           repeatOn={this.state.repeatOn}
           shuffleOn={this.state.shuffleOn}
+          onIncrease={this.onIncrease}
           forwardDisabled={this.state.selectedTrack === this.props.tracks.length - 1}
           onPressShuffle={() => this.setState({shuffleOn: !this.state.shuffleOn})}
           onPressPlay={() => this.setState({paused: false})}
