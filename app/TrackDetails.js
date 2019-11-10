@@ -18,13 +18,15 @@ const TrackDetails = ({
   onMorePress,
   onTitlePress,
   onArtistPress,
+  onAddHold,
+  onAddHoldOff,
   onHold,
   onHoldOff,
 }) => (
   <View style={styles.container}>
-    <TouchableOpacity onPress={onAddPress}>
+    <TouchableOpacity onPress={onAddPress} onPressIn={onAddHold} onPressOut={onAddHoldOff}>
       <Image style={styles.button}
-        source={require('../img/ic_add_circle_outline_white.png')} />
+        source={require('../img/ic_keyboard_arrow_down_white.png')} />
     </TouchableOpacity>
     <View style={styles.detailsWrapper}>
       <Text style={styles.title} onPress={onTitlePress}>{title}</Text>
@@ -33,7 +35,7 @@ const TrackDetails = ({
     <TouchableOpacity onPress={onMorePress} onPressIn={onHold} onPressOut={onHoldOff}>
       <View style={styles.moreButton}>
         <Image style={styles.moreButtonIcon}
-          source={require('../img/ic_more_horiz_white.png')} />
+          source={require('../img/ic_add_circle_outline_white.png')} />
       </View>
     </TouchableOpacity>
   </View>
@@ -67,6 +69,8 @@ const styles = StyleSheet.create({
   },
   button: {
     opacity: 0.72,
+    width: 40,
+    height: 40,
   },
   moreButton: {
     borderColor: 'rgb(255, 255, 255)',
