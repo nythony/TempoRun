@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import Slider from 'react-native-slider';
+import Slider from '@react-native-community/slider';
 
 function pad(n, width, z=0) {
   n = n + '';
